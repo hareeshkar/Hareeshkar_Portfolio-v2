@@ -459,15 +459,6 @@ export default function About() {
     []
   );
 
-  const stack = useMemo(
-    () => [
-      { label: "frontend", items: ["react", "tailwindcss", "framer-motion"] },
-      { label: "backend", items: ["asp.net core", "node.js", "postgresql"] },
-      { label: "ai / tools", items: ["opencv", "llm tooling", "vs code ext."] },
-    ],
-    []
-  );
-
   const expertise = useMemo(
     () => [
       {
@@ -610,9 +601,9 @@ export default function About() {
                   <GoldHighlight>Node.js</GoldHighlight> on the backend, and
                   a growing focus on{" "}
                   <GoldHighlight>AI-assisted tooling</GoldHighlight>. I'm
-                  still early in my career, and I{" "}
+                  currently putting all of it to work at a startup,{" "}
                   <span className="text-[var(--color-accent-light)] italic">
-                    seek out projects that teach me something new
+                    where moving fast means touching every part of the stack
                   </span>
                   .
                 </AlchemyTextReveal>
@@ -664,37 +655,6 @@ export default function About() {
               </motion.div>
             </motion.div>
           </div>
-
-          {/* --- STACK_MANIFEST — the section's signature: a real, honestly-labeled technical
-               artifact (styled like a package manifest) standing in for the old fabricated
-               ID-badge telemetry. Every line here is true, nothing is decorative filler. --- */}
-          <motion.div
-            variants={cinematicReveal}
-            className="mt-16 border border-[var(--color-border)] bg-[var(--color-surface)]/40 backdrop-blur-sm font-mono-tech"
-          >
-            <div className="flex items-center justify-between px-6 py-3 border-b border-[var(--color-border)]">
-              <span className="text-[10px] md:text-xs text-[var(--color-accent)] tracking-[0.25em]">
-                STACK_MANIFEST
-              </span>
-              <span className="text-[10px] text-[var(--color-text-secondary)] tracking-widest">
-                CURRENT
-              </span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--color-border)]">
-              {stack.map((group) => (
-                <div key={group.label} className="p-6">
-                  <div className="text-[11px] text-[var(--color-accent)] tracking-widest mb-3">
-                    // {group.label}
-                  </div>
-                  <ul className="space-y-1.5 text-sm text-[var(--color-text-secondary)]">
-                    {group.items.map((item) => (
-                      <li key={item}>- {item}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </motion.div>
 
           {/* --- ANIMATED DATA HUD (STATS) --- */}
           <motion.div
