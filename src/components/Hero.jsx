@@ -195,6 +195,11 @@ export default function PremiumHero() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/30 pointer-events-none" />
       </motion.div>
 
+      {/* Dissolves the hero's fixed dark video into whatever the next section's
+          background is (cream in light mode, void in dark mode), so the scroll
+          transition reads as one continuous surface instead of a hard cut. */}
+      <div className="absolute inset-x-0 bottom-0 h-40 md:h-56 z-[5] bg-gradient-to-b from-transparent to-[var(--color-background)] pointer-events-none" />
+
       {/* 3. Main Hero Typography Block */}
       <main className="relative flex-1 flex flex-col justify-center items-center md:items-end px-6 md:px-16 pt-24 md:pt-32 z-10">
         <motion.div
