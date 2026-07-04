@@ -1,0 +1,238 @@
+@import "tailwindcss";
+
+@layer base {
+  /* --- TYPOGRAPHY TOKENS (The Machine God Stack) --- */
+  :root {
+    --font-display: "Cinzel", serif; /* Headers */
+    --font-body: "Cormorant Garamond", serif; /* Reading text */
+    --font-tech: "JetBrains Mono", monospace; /* Data/Code */
+  }
+
+  /* --- LIGHT THEME: "THE ARCHITECT'S DESK" --- */
+  /* Aesthetic: Marble, Ink, Oxidized Gold, Museum Paper */
+  :root,
+  [data-theme="light"] {
+    /* Base Layers */
+    --color-background: #f2f0e9; /* Alabaster Stone */
+    --color-surface: #ffffff; /* Pure White Paper */
+    --color-surface-secondary: #e8e6df; /* Subtle Grey Wash */
+
+    /* Typography */
+    --color-text-primary: #141413; /* Soft Charcoal (Not harsh black) */
+    --color-text-secondary: #595755; /* Graphite */
+    --color-text-tertiary: #9ca3af; /* Silverpoint */
+
+    /* The Gold (Darker for contrast on light backgrounds) */
+    --color-accent: #a38848; /* Oxidized Antique Gold */
+    --color-accent-hover: #8a7035;
+    --color-accent-glow: rgba(163, 136, 72, 0.25);
+    --color-accent-light: rgba(163, 136, 72, 0.25);
+
+    /* Structural */
+    --color-border: rgba(20, 20, 19, 0.08);
+    --color-border-strong: rgba(20, 20, 19, 0.15);
+
+    /* Depth */
+    --color-shadow-soft: rgba(20, 20, 19, 0.04);
+    --color-shadow-medium: rgba(20, 20, 19, 0.08);
+    --color-shadow-gold: rgba(163, 136, 72, 0.15);
+
+    /* Project Gallery Image Settings */
+    --bg-image-opacity: 0.55;
+    --bg-image-filter: grayscale(0%) contrast(1.05) sepia(0.1); /* Subtle warmth for light mode */
+    --bg-image-scrim: 0.2; /* Slight black tint to make image pop against light bg */
+
+    /* Global Scrim (Light Mode Contrast Booster) */
+    --global-scrim-opacity: 0.04; /* 4% black overlay for better contrast */
+  }
+
+  /* --- DARK THEME: "THE DIGITAL ETERNAL" --- */
+  /* Aesthetic: Obsidian, Bioluminescence, Polished Gold, Deep Space */
+  [data-theme="dark"] {
+    /* Base Layers */
+    --color-background: #050505; /* True Void (Neutral Black) */
+    --color-surface: #0a0a0a; /* Obsidian */
+    --color-surface-secondary: #121212; /* Matte Carbon */
+
+    /* Typography */
+    --color-text-primary: #ededed; /* Starlight White */
+    --color-text-secondary: #888888; /* Faded HUD */
+    --color-text-tertiary: #444444; /* Deep Space Debris */
+
+    /* The Gold (Brighter for glow on dark backgrounds) */
+    --color-accent: #c2a370; /* Polished Antique Gold */
+    --color-accent-hover: #d4b885;
+    --color-accent-glow: rgba(194, 163, 112, 0.35);
+    --color-accent-light: rgba(194, 163, 112, 0.35);
+
+    /* Structural */
+    --color-border: rgba(255, 255, 255, 0.08);
+    --color-border-strong: rgba(255, 255, 255, 0.15);
+
+    /* Depth */
+    --color-shadow-soft: rgba(0, 0, 0, 0.4);
+    --color-shadow-medium: rgba(0, 0, 0, 0.6);
+    --color-shadow-gold: rgba(194, 163, 112, 0.2);
+
+    /* Project Gallery Image Settings */
+    --bg-image-opacity: 0.2;
+    --bg-image-filter: grayscale(100%) contrast(1.25);
+    --bg-image-scrim: 0; /* No extra scrim needed in dark mode */
+
+    /* Global Scrim */
+    --global-scrim-opacity: 0; /* No scrim in dark mode */
+  }
+
+  /* --- SMOOTH THEME TRANSITION ENGINE --- */
+  .theme-transition,
+  .theme-transition *,
+  body {
+    transition: background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* --- GLOBAL RESETS --- */
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: auto;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Video optimization */
+  video {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform, filter;
+  }
+
+  /* Prevent video flicker on load */
+  video::-webkit-media-controls {
+    display: none !important;
+  }
+
+  /* Smooth video transitions */
+  video.video-loading {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  video.video-ready {
+    opacity: 1;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+  }
+
+  /* --- TYPOGRAPHY MAPPING --- */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 400; /* Cinematic thinness */
+    letter-spacing: -0.02em;
+  }
+
+  code,
+  pre,
+  .font-mono {
+    font-family: var(--font-tech);
+  }
+
+  /* --- LAYOUT UTILITIES --- */
+  .section-padding {
+    padding: 8rem 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .section-padding {
+      padding: 12rem 4rem;
+    }
+  }
+
+  /* --- CINEMATIC SHADOWS (The "Glow" System) --- */
+  /* Subtle lift */
+  .shadow-soft {
+    box-shadow: 0 4px 20px var(--color-shadow-soft);
+  }
+
+  /* The "Artifact" Glow - Used for cards/images */
+  .shadow-gold {
+    box-shadow: 0 0 0 1px var(--color-border),
+      0 10px 40px -10px var(--color-shadow-gold),
+      0 20px 60px -15px var(--color-shadow-medium);
+  }
+
+  /* Floating Elements */
+  .shadow-float {
+    box-shadow: 0 20px 80px var(--color-shadow-medium);
+  }
+
+  /* Hover State for Interactive Elements */
+  .hover\:shadow-gold-glow:hover {
+    box-shadow: 0 0 0 1px var(--color-accent),
+      0 0 30px -5px var(--color-accent-glow);
+    transition: box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* --- INTERACTION UTILITIES --- */
+  .transition-lux {
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hover\:text-accent:hover {
+    color: var(--color-accent);
+    transition: color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hover\:border-accent:hover {
+    border-color: var(--color-accent);
+    transition: border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* --- TEXTURE UTILITIES --- */
+  /* Adds a subtle grain to the background for "paper/film" feel */
+  .bg-grain {
+    position: relative;
+  }
+  .bg-grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+    mix-blend-mode: overlay;
+  }
+
+  /* --- HARDWARE ACCELERATION (The 120fps Engine) --- */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform, opacity;
+  }
+
+  .will-change-transform {
+    will-change: transform;
+  }
+}
