@@ -14,10 +14,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
 
 // --- EXISTING SUB-COMPONENTS ---
-import ArchitectCard from "./ArchitectCard";
 import TextScramble from "./TextScramble";
 import Spotlight from "./Spotlight";
-import AnnotationLines from "./blueprint/AnnotationLines";
 import SmartVideo from "./SmartVideo";
 
 // --- 1. STYLE INJECTION ---
@@ -261,7 +259,7 @@ const InteractiveVideoCard = ({ item, index }) => {
           }`}
         />
         <span className="font-mono-tech text-[8px] tracking-widest text-[var(--color-text-secondary)]">
-          LOG_0{index + 1}
+          REEL_0{index + 1}
         </span>
       </div>
 
@@ -422,9 +420,7 @@ export default function About() {
   const sectionRef = useRef(null);
   const [ref, inView] = useInView({ threshold: 0.1 });
 
-  const architectCardRef = useRef(null);
   const statRefs = useRef([]);
-  const [showAnnotations, setShowAnnotations] = useState(false);
   const borderLineRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -459,6 +455,15 @@ export default function About() {
       { number: "6+", label: "Core Languages" },
       { number: "15+", label: "Production Builds" },
       { number: "3", label: "Deployment Platforms" },
+    ],
+    []
+  );
+
+  const stack = useMemo(
+    () => [
+      { label: "frontend", items: ["react", "tailwindcss", "framer-motion"] },
+      { label: "backend", items: ["asp.net core", "node.js", "postgresql"] },
+      { label: "ai / tools", items: ["opencv", "llm tooling", "vs code ext."] },
     ],
     []
   );
@@ -513,13 +518,6 @@ export default function About() {
         finalY="-30%"
         inView={inView}
       />
-      <AnnotationLines
-        isActive={showAnnotations}
-        fromRef={architectCardRef}
-        toRefs={statRefs.current}
-        color="var(--color-accent-glow)"
-      />
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 z-20 pt-12 lg:pt-16">
         {/* --- HEADER (Animates Every Time) --- */}
         <motion.div
@@ -534,7 +532,7 @@ export default function About() {
               <div className="inline-flex items-center gap-3 mb-8">
                 <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
                 <span className="font-mono-tech text-xs text-[var(--color-accent)] tracking-[0.3em]">
-                  THE CRAFTSMAN // 001
+                  ABOUT
                 </span>
               </div>
               <h2 className="font-cinzel text-5xl sm:text-7xl lg:text-8xl leading-[0.85] text-[var(--color-text-primary)] tracking-tight">
@@ -566,136 +564,137 @@ export default function About() {
           viewport={{ margin: "-10%", once: true }} // Animate only once
           variants={containerStagger}
         >
-          {/* --- CONTENT GRID --- */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-            {/* LEFT: Identity Card */}
-            <div className="lg:col-span-5">
-              <div className="lg:sticky lg:top-32 transition-all duration-700 ease-out">
-                <motion.div
-                  ref={architectCardRef}
-                  variants={cinematicReveal}
-                  className="relative group outline-none"
-                  onMouseEnter={() => setShowAnnotations(true)}
-                  onMouseLeave={() => setShowAnnotations(false)}
+          {/* --- BIO: full-width now that there's no second portrait to balance (the video in Hero already carries that job) --- */}
+          <div className="max-w-4xl relative">
+            {/* Border line now marks the reading column itself */}
+            <div
+              ref={borderLineRef}
+              className="hidden lg:block absolute -left-8 top-0 w-[1px] h-full bg-gradient-to-b from-[var(--color-border)]/60 via-[var(--color-border)]/40 to-transparent"
+              style={{ transformOrigin: "top" }}
+            />
+
+            <motion.div className="space-y-10" variants={containerStagger}>
+              {/* PARAGRAPH 1 - The Hook */}
+              <motion.div variants={cinematicReveal}>
+                <AlchemyTextReveal
+                  revealType="words"
+                  stagger={0.08}
+                  scrub={0.35}
+                  start="top 88%"
+                  end="bottom 70%"
+                  className="text-3xl md:text-4xl font-light leading-[1.5] tracking-tight"
                 >
-                  <div className="absolute -inset-8 bg-[var(--color-accent-light)] blur-3xl rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-1000" />
-                  <ArchitectCard
-                    name="HAREESHKAR RAVI"
-                    title="DIGITAL ARCHITECT"
-                    handle="ID_94021"
-                    avatarUrl="profile.webp"
-                  />
-                  <div className="flex justify-between mt-4 px-2 font-mono-tech text-[9px] text-[var(--color-accent)] opacity-60 tracking-[0.2em]">
-                    <span>FIG_1.0</span>
-                    <span>AUTH_KEY_VALID</span>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-
-            {/* RIGHT: Bio */}
-            <div className="lg:col-span-7 flex flex-col justify-center pl-0 lg:pl-8 relative">
-              {/* Animated Border Line */}
-              <div
-                ref={borderLineRef}
-                className="hidden lg:block absolute left-0 top-0 w-[1px] h-full bg-gradient-to-b from-[var(--color-border)]/60 via-[var(--color-border)]/40 to-transparent"
-                style={{ transformOrigin: "top" }}
-              />
-
-              <motion.div
-                className="space-y-12 py-8 px-4 lg:px-12"
-                variants={containerStagger}
-              >
-                {/* PARAGRAPH 1 - The Hook */}
-                <motion.div variants={cinematicReveal}>
-                  <AlchemyTextReveal
-                    revealType="words"
-                    stagger={0.08}
-                    scrub={0.35}
-                    start="top 88%"
-                    end="bottom 70%"
-                    className="text-3xl md:text-4xl font-light leading-[1.5] tracking-tight"
-                  >
-                    I build software like{" "}
-                    <GoldHighlight>architecture</GoldHighlight>—where{" "}
-                    <GoldHighlight>precision</GoldHighlight> and{" "}
-                    <GoldHighlight>elegance</GoldHighlight> are inseparable.{" "}
-                    Every system I design stands on{" "}
-                    <span className="text-[var(--color-accent-light)] italic">
-                      solid foundations
-                    </span>
-                    .
-                  </AlchemyTextReveal>
-                </motion.div>
-
-                {/* PARAGRAPH 2 - The Expertise */}
-                <motion.div variants={cinematicReveal}>
-                  <AlchemyTextReveal
-                    revealType="words"
-                    stagger={0.06}
-                    scrub={0.4}
-                    className="text-lg md:text-xl text-[var(--color-text-secondary)] leading-[1.8] tracking-wide"
-                  >
-                    Full-stack expertise across{" "}
-                    <GoldHighlight>backend systems</GoldHighlight>,{" "}
-                    <GoldHighlight>intelligent frontends</GoldHighlight>, and{" "}
-                    <GoldHighlight>AI integration</GoldHighlight>. I work with
-                    enterprise platforms, scalable architectures, and systems
-                    that{" "}
-                    <span className="text-[var(--color-accent-light)] italic">
-                      evolve with purpose
-                    </span>
-                    .
-                  </AlchemyTextReveal>
-                </motion.div>
-
-                {/* PARAGRAPH 3 - The Approach */}
-                <motion.div variants={cinematicReveal}>
-                  <AlchemyTextReveal
-                    revealType="words"
-                    stagger={0.07}
-                    scrub={0.38}
-                    className="text-lg md:text-xl text-[var(--color-text-secondary)] leading-[1.8] tracking-wide"
-                  >
-                    Whether architecting{" "}
-                    <GoldHighlight>scalable backends</GoldHighlight>, crafting{" "}
-                    <GoldHighlight>responsive frontends</GoldHighlight>, or
-                    integrating <GoldHighlight>AI workflows</GoldHighlight>—each
-                    system is engineered for clarity and resilience. The best
-                    software fades into the background,{" "}
-                    <span className="text-[var(--color-accent-light)] italic">
-                      letting impact speak
-                    </span>
-                    .
-                  </AlchemyTextReveal>
-                </motion.div>
-
-                {/* CTA Button */}
-                <motion.div variants={cinematicReveal} className="pt-4">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollTo("#projects", { offset: -80 });
-                    }}
-                    className="group relative px-8 py-4 bg-transparent border border-[var(--color-accent)]/40 text-[var(--color-accent)] font-mono-tech text-xs tracking-[0.2em] overflow-hidden transition-all hover:border-[var(--color-accent)]"
-                  >
-                    <span className="absolute inset-0 w-0 bg-[var(--color-accent)] transition-all duration-[0.4s] ease-out group-hover:w-full opacity-10"></span>
-                    <span className="relative flex items-center gap-3">
-                      <TextScramble
-                        text="VIEW_WORK"
-                        trigger="inViewAndHover"
-                        speed={30}
-                        replayOnView={true}
-                      />
-                      <span className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-[var(--color-background)]">
-                        →
-                      </span>
-                    </span>
-                  </button>
-                </motion.div>
+                  I build software like{" "}
+                  <GoldHighlight>architecture</GoldHighlight>—where{" "}
+                  <GoldHighlight>precision</GoldHighlight> and{" "}
+                  <GoldHighlight>elegance</GoldHighlight> are inseparable.{" "}
+                  Every system I design stands on{" "}
+                  <span className="text-[var(--color-accent-light)] italic">
+                    solid foundations
+                  </span>
+                  .
+                </AlchemyTextReveal>
               </motion.div>
-            </div>
+
+              {/* PARAGRAPH 2 - The Expertise */}
+              <motion.div variants={cinematicReveal}>
+                <AlchemyTextReveal
+                  revealType="words"
+                  stagger={0.06}
+                  scrub={0.4}
+                  className="text-lg md:text-xl text-[var(--color-text-secondary)] leading-[1.8] tracking-wide"
+                >
+                  Day to day that means{" "}
+                  <GoldHighlight>React</GoldHighlight> on the frontend,{" "}
+                  <GoldHighlight>ASP.NET Core</GoldHighlight> and{" "}
+                  <GoldHighlight>Node.js</GoldHighlight> on the backend, and
+                  a growing focus on{" "}
+                  <GoldHighlight>AI-assisted tooling</GoldHighlight>. I'm
+                  still early in my career, and I{" "}
+                  <span className="text-[var(--color-accent-light)] italic">
+                    seek out projects that teach me something new
+                  </span>
+                  .
+                </AlchemyTextReveal>
+              </motion.div>
+
+              {/* PARAGRAPH 3 - The Approach */}
+              <motion.div variants={cinematicReveal}>
+                <AlchemyTextReveal
+                  revealType="words"
+                  stagger={0.07}
+                  scrub={0.38}
+                  className="text-lg md:text-xl text-[var(--color-text-secondary)] leading-[1.8] tracking-wide"
+                >
+                  Whether I'm wiring up a{" "}
+                  <GoldHighlight>backend</GoldHighlight>, shaping a{" "}
+                  <GoldHighlight>responsive frontend</GoldHighlight>, or
+                  wiring in an <GoldHighlight>AI workflow</GoldHighlight>, I
+                  care about the same thing: code that stays readable once
+                  I'm not the only one touching it,{" "}
+                  <span className="text-[var(--color-accent-light)] italic">
+                    letting the work speak for itself
+                  </span>
+                  .
+                </AlchemyTextReveal>
+              </motion.div>
+
+              {/* CTA Button */}
+              <motion.div variants={cinematicReveal} className="pt-4">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollTo("#projects", { offset: -80 });
+                  }}
+                  className="group relative px-8 py-4 bg-transparent border border-[var(--color-accent)]/40 text-[var(--color-accent)] font-mono-tech text-xs tracking-[0.2em] overflow-hidden transition-all hover:border-[var(--color-accent)]"
+                >
+                  <span className="absolute inset-0 w-0 bg-[var(--color-accent)] transition-all duration-[0.4s] ease-out group-hover:w-full opacity-10"></span>
+                  <span className="relative flex items-center gap-3">
+                    <TextScramble
+                      text="View Work"
+                      trigger="inViewAndHover"
+                      speed={30}
+                      replayOnView={true}
+                    />
+                    <span className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-[var(--color-background)]">
+                      →
+                    </span>
+                  </span>
+                </button>
+              </motion.div>
+            </motion.div>
           </div>
+
+          {/* --- STACK_MANIFEST — the section's signature: a real, honestly-labeled technical
+               artifact (styled like a package manifest) standing in for the old fabricated
+               ID-badge telemetry. Every line here is true, nothing is decorative filler. --- */}
+          <motion.div
+            variants={cinematicReveal}
+            className="mt-16 border border-[var(--color-border)] bg-[var(--color-surface)]/40 backdrop-blur-sm font-mono-tech"
+          >
+            <div className="flex items-center justify-between px-6 py-3 border-b border-[var(--color-border)]">
+              <span className="text-[10px] md:text-xs text-[var(--color-accent)] tracking-[0.25em]">
+                STACK_MANIFEST
+              </span>
+              <span className="text-[10px] text-[var(--color-text-secondary)] tracking-widest">
+                CURRENT
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--color-border)]">
+              {stack.map((group) => (
+                <div key={group.label} className="p-6">
+                  <div className="text-[11px] text-[var(--color-accent)] tracking-widest mb-3">
+                    // {group.label}
+                  </div>
+                  <ul className="space-y-1.5 text-sm text-[var(--color-text-secondary)]">
+                    {group.items.map((item) => (
+                      <li key={item}>- {item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
           {/* --- ANIMATED DATA HUD (STATS) --- */}
           <motion.div
@@ -740,11 +739,11 @@ export default function About() {
               className="flex items-end justify-between border-b border-[var(--color-border)] pb-6"
               variants={cinematicReveal}
             >
-              <h3 className="font-cinzel text-3xl text-[var(--color-text-primary]">
+              <h3 className="font-cinzel text-3xl text-[var(--color-text-primary)]">
                 TECHNICAL DOMAINS
               </h3>
               <span className="font-mono-tech text-[10px] text-[var(--color-accent)] tracking-widest">
-                VISUAL_LOG_SEQUENCE
+                SELECTED_REELS
               </span>
             </motion.div>
 
