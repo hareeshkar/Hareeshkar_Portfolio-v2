@@ -178,6 +178,7 @@ export default function PremiumHero() {
 
   return (
     <div
+      id="home"
       ref={containerRef}
       className="relative min-h-screen w-full bg-[#0B0B0B] text-[#E5E5E5] flex flex-col justify-between overflow-hidden select-none"
     >
