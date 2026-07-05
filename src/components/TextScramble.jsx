@@ -23,6 +23,9 @@ const TextScramble = ({
   // visible from the first frame, even though it hasn't had its turn yet
   // in a load-in sequence. Set true to keep it invisible until it starts.
   startHidden = false,
+  // Display-type usage (hero/section titles) reads cleaner without the
+  // completion underline; nav/labels keep it.
+  showUnderline = true,
   ...rest
 }) => {
   const content = text || title || "";
@@ -122,7 +125,7 @@ const TextScramble = ({
                 y: isRevealed ? 0 : [0, -1, 1, 0], // Subtle micro-shake while scrambling
               }}
               transition={{
-                duration: isRevealed ? 0.5 : 0.11, // Slower reveal, slightly slower shake
+                duration: isRevealed ? 0.32 : 0.11, // Quick lock-in keeps the decode feeling crisp
                 ease: isRevealed ? "backOut" : "linear",
               }}
             >
@@ -133,13 +136,15 @@ const TextScramble = ({
       </span>
 
       {/* Progress / Underline Indicator */}
-      <motion.div
-        className="absolute bottom-0 left-0 h-[1px] origin-left"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: finished ? 1 : 0 }}
-        style={{ backgroundColor: accentColor }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-      />
+      {showUnderline && (
+        <motion.div
+          className="absolute bottom-0 left-0 h-[1px] origin-left"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: finished ? 1 : 0 }}
+          style={{ backgroundColor: accentColor }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        />
+      )}
     </Component>
   );
 };

@@ -15,7 +15,7 @@ const BentoItem = ({
       viewport={{ once: true, margin: "-10%" }}
       transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
       className={`group relative overflow-hidden bg-[var(--color-surface)]/40 backdrop-blur-md border border-[var(--color-border)] hover:border-[var(--color-accent)]/50 transition-colors duration-500 ${className}`}
-      style={{ isolation: "auto" }} // Explicitly set to auto to prevent isolation
+      style={{ isolation: "auto" }}
     >
       {/* Hover Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />

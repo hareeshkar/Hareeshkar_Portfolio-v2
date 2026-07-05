@@ -4,6 +4,10 @@ import { useTheme } from "./ThemeContext";
 import { HiX, HiSun, HiMoon } from "react-icons/hi";
 import RHLogo from "./RHLogo";
 
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 const MobileMenu = ({ isOpen, onClose, items = [], onNavigate }) => {
   const { theme, toggleTheme } = useTheme();
   const panelRef = useRef(null);
@@ -19,6 +23,13 @@ const MobileMenu = ({ isOpen, onClose, items = [], onNavigate }) => {
     const itemEls = Array.from(
       panel.querySelectorAll(".mobile-menu-item-label")
     );
+
+    // Reduced motion: resolve to the open state instantly, no tween.
+    if (prefersReducedMotion()) {
+      gsap.set(itemEls, { yPercent: 0, rotate: 0 });
+      gsap.set(panel, { xPercent: 0, scale: 1 });
+      return null;
+    }
 
     gsap.set(itemEls, { yPercent: 100, rotate: 3 });
     gsap.set(panel, { xPercent: 100, scale: 0.96 });
@@ -54,6 +65,12 @@ const MobileMenu = ({ isOpen, onClose, items = [], onNavigate }) => {
     (postCloseCallback) => {
       busyRef.current = true;
       openTlRef.current?.kill();
+      if (prefersReducedMotion()) {
+        busyRef.current = false;
+        onClose();
+        if (typeof postCloseCallback === "function") postCloseCallback();
+        return;
+      }
       gsap.to(panelRef.current, {
         xPercent: 100,
         scale: 0.96,

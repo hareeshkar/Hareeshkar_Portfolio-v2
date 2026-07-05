@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { SiGithub, SiLinkedin, SiX } from "react-icons/si";
 import { HiEnvelope } from "react-icons/hi2";
 
@@ -10,7 +10,7 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.05,
+      delayChildren: 0.2,
     },
   },
 };
@@ -18,55 +18,59 @@ const containerVariants = {
 const techRevealVariant = {
   hidden: {
     opacity: 0,
-    scale: 0.96, // Starts slightly smaller (zoomed out)
-    y: 0, // FORCE ZERO MOVEMENT
-    x: 0, // FORCE ZERO MOVEMENT
+    y: 20,
+    scale: 0.96,
   },
   visible: {
     opacity: 1,
-    scale: 1, // Locks into place
+    y: 0,
+    scale: 1,
     transition: {
       duration: 0.6,
-      ease: [0.25, 1, 0.5, 1], // "Quart Out" - fast start, rock solid stop
+      ease: [0.16, 1, 0.3, 1],
     },
   },
 };
 
-const SocialLink = ({ href, icon: Icon, label }) => (
-  <motion.a
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    variants={techRevealVariant}
-    // REMOVED "transition-all" to prevent CSS fighting the Entrance Animation
-    // Only animating colors/borders on hover now
-    className="group relative flex items-center gap-4 p-4 border border-[var(--color-border)] bg-[var(--color-surface)]/20 backdrop-blur-md overflow-hidden hover:border-[var(--color-accent)]/50 active:scale-[0.99] transition-colors duration-300 ease-out"
-    // "opacity" and "transform" are the only cheap things to animate on mobile
-    style={{ willChange: "opacity, transform" }}
-  >
-    {/* Hover Background Sweep */}
-    <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out" />
+const SocialLink = ({ href, icon: Icon, label }) => {
+  const shouldReduceMotion = useReducedMotion();
+  const rm = shouldReduceMotion;
 
-    {/* Icon Box */}
-    <div className="relative z-10 p-2 bg-[var(--color-background)]/80 rounded-sm text-[var(--color-text-secondary)] group-hover:text-[var(--color-accent)] transition-colors duration-300 border border-[var(--color-border)] group-hover:border-[var(--color-accent)]/30">
-      <Icon size={18} />
-    </div>
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      variants={techRevealVariant}
+      whileHover={rm ? {} : { scale: 1.02, y: -2 }}
+      whileTap={{ scale: 0.98 }}
+      className="group relative flex items-center gap-4 p-4 border border-[var(--color-border)] bg-[var(--color-surface)]/20 backdrop-blur-md overflow-hidden hover:border-[var(--color-accent)]/50 active:scale-[0.99] transition-colors duration-300 ease-out"
+      style={{ willChange: "opacity, transform" }}
+    >
+      {/* Hover Background Sweep */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out" />
 
-    {/* Text Content */}
-    <div className="relative z-10 flex flex-col">
-      <span className="font-mono-tech text-[9px] text-[var(--color-text-secondary)] uppercase tracking-[0.15em] opacity-70 group-hover:opacity-100 transition-opacity duration-300">
-        {label}
-      </span>
-      <span className="font-cinzel text-sm text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors duration-300">
-        Connect
-      </span>
-    </div>
+      {/* Icon Box */}
+      <div className="relative z-10 p-2 bg-[var(--color-background)]/80 rounded-sm text-[var(--color-text-secondary)] group-hover:text-[var(--color-accent)] transition-colors duration-300 border border-[var(--color-border)] group-hover:border-[var(--color-accent)]/30">
+        <Icon size={18} />
+      </div>
 
-    {/* Subtle Corner Accents (Visible on Hover) */}
-    <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-[var(--color-accent)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-    <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-[var(--color-accent)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-  </motion.a>
-);
+      {/* Text Content */}
+      <div className="relative z-10 flex flex-col">
+        <span className="font-mono-tech text-[9px] text-[var(--color-text-secondary)] uppercase tracking-[0.15em] opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+          {label}
+        </span>
+        <span className="font-cinzel text-sm text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors duration-300">
+          Connect
+        </span>
+      </div>
+
+      {/* Subtle Corner Accents (Visible on Hover) */}
+      <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-[var(--color-accent)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-[var(--color-accent)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    </motion.a>
+  );
+};
 
 const ContactInfo = () => {
   return (
@@ -74,8 +78,6 @@ const ContactInfo = () => {
       className="space-y-6 w-full"
       initial="hidden"
       whileInView="visible"
-      // CRITICAL: margin decreased to -5% to ensure it triggers easily on mobile
-      // once: true prevents any re-animation/refreshing when scrolling back
       viewport={{ once: true, margin: "-5% 0px" }}
       variants={containerVariants}
     >

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+// Hero's own video loads via its own <video preload="auto"> tag — listing it here too
+// would fetch it twice. These are the About-section preview clips only.
 const VIDEOS = [
   { src: "videos/fsc.mp4", priority: "high" },
   { src: "videos/isc.mp4", priority: "high" },
@@ -67,15 +69,29 @@ export default function VideoPreloader() {
       }
     };
 
-    // Start preloading after initial page load
+    // Defer until the browser is actually idle (not just "load" fired) so this never
+    // competes with the hero video's own decode/paint for bandwidth or the main thread.
+    let idleHandle = null;
+    const scheduleIdlePreload = () => {
+      if ("requestIdleCallback" in window) {
+        idleHandle = window.requestIdleCallback(loadSequentially, { timeout: 4000 });
+      } else {
+        idleHandle = setTimeout(loadSequentially, 2000);
+      }
+    };
+
     if (document.readyState === "complete") {
-      loadSequentially();
+      scheduleIdlePreload();
     } else {
-      window.addEventListener("load", loadSequentially);
+      window.addEventListener("load", scheduleIdlePreload);
     }
 
     return () => {
-      window.removeEventListener("load", loadSequentially);
+      window.removeEventListener("load", scheduleIdlePreload);
+      if (idleHandle !== null) {
+        if ("cancelIdleCallback" in window) window.cancelIdleCallback(idleHandle);
+        else clearTimeout(idleHandle);
+      }
     };
   }, []);
 

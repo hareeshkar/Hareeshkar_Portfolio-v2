@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 /**
  * WaxSealButton - Submit button with wax seal stamp animation
@@ -15,6 +15,7 @@ const WaxSealButton = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -52,12 +53,12 @@ const WaxSealButton = ({
       onMouseEnter={() => !isMobile && setIsHovered(true)}
       onMouseLeave={() => !isMobile && setIsHovered(false)}
       className={`btn btn-primary w-full py-3 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden isolate ${className}`}
-      whileTap={!disabled && !isLoading ? { scale: 0.98 } : {}}
+      whileTap={!disabled && !isLoading && !shouldReduceMotion ? { scale: 0.98 } : {}}
       transition={{ duration: 0.15 }}
       style={{ willChange: "transform" }}
     >
       {/* Success state background glow - optimized */}
-      {buttonState === "success" && (
+      {buttonState === "success" && !shouldReduceMotion && (
         <motion.div
           className="absolute inset-0 bg-green-500/20 rounded-[inherit]"
           initial={{ opacity: 0 }}
@@ -71,7 +72,7 @@ const WaxSealButton = ({
       )}
 
       {/* Background shimmer effect - disabled on mobile for performance */}
-      {!isMobile && (
+      {!isMobile && !shouldReduceMotion && (
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-[inherit]"
           initial={{ x: "-100%" }}

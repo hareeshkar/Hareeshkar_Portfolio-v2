@@ -22,9 +22,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Optimized font loading with display=swap and reduced weights -->
+    <!-- Optimized font loading with display=swap — these are the fonts actually referenced
+         by --font-display/--font-body/--font-tech (src/index.css) and SignatureField.jsx.
+         Loading them here, in parallel with the initial HTML, replaces a component-level
+         @import that was chaining page → <style> parse → @import fetch → font fetch, which
+         was delaying the hero title's paint (Lighthouse traced ~4.2s of render delay to it). -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&family=Dancing+Script:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@300;400&family=Dancing+Script:wght@400;700&display=swap"
       rel="stylesheet"
     />
 

@@ -60,8 +60,14 @@ export default function Navbar() {
   }, [dispatchReady]);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 50);
+        ticking = false;
+      });
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -101,7 +107,7 @@ export default function Navbar() {
               as="button"
               type="button"
               trigger="alwaysAndHover"
-              speed={33}
+              speed={32}
               onClick={handleMenuClick}
               onComplete={handleMenuDone}
               className="text-sm sm:text-sm md:text-base font-semibold tracking-[0.2em] md:tracking-[0.25em] uppercase cursor-pointer"
@@ -134,7 +140,7 @@ export default function Navbar() {
               trigger="manualAndHover"
               active={stage === STAGES.CONTACT}
               startHidden
-              speed={33}
+              speed={32}
               onClick={handleContactClick}
               onComplete={handleContactDone}
               className="text-sm sm:text-sm md:text-base font-semibold tracking-[0.2em] md:tracking-[0.25em] uppercase cursor-pointer"

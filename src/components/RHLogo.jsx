@@ -21,7 +21,7 @@ export default function RHLogo({ className = "", strokeWidth = 2, build = false,
     initial: { pathLength: 0, opacity: 0 },
     animate: hidden ? { pathLength: 0, opacity: 0 } : { pathLength: 1, opacity: 1 },
     transition: build
-      ? { duration: 0.31, ease: "easeInOut", delay }
+      ? { duration: 0.22, ease: "easeInOut", delay }
       : { duration: 0 },
   });
 
@@ -49,7 +49,7 @@ export default function RHLogo({ className = "", strokeWidth = 2, build = false,
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
-        {...stroke(0.065)}
+        {...stroke(0.045)}
       />
       {/* Diagonal leg */}
       <motion.line
@@ -57,7 +57,7 @@ export default function RHLogo({ className = "", strokeWidth = 2, build = false,
         stroke="currentColor"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-        {...stroke(0.12)}
+        {...stroke(0.09)}
       />
 
       {/* ── H ── */}
@@ -67,7 +67,7 @@ export default function RHLogo({ className = "", strokeWidth = 2, build = false,
         stroke="currentColor"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-        {...stroke(0.165)}
+        {...stroke(0.12)}
       />
       {/* Right vertical */}
       <motion.line
@@ -75,7 +75,7 @@ export default function RHLogo({ className = "", strokeWidth = 2, build = false,
         stroke="currentColor"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-        {...stroke(0.21)}
+        {...stroke(0.155)}
       />
       {/* Crossbar */}
       <motion.line
@@ -83,7 +83,7 @@ export default function RHLogo({ className = "", strokeWidth = 2, build = false,
         stroke="currentColor"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-        {...stroke(0.26)}
+        {...stroke(0.19)}
       />
 
       {/* ── Dot accent — lands last, signals the mark is fully assembled ── */}
@@ -92,7 +92,7 @@ export default function RHLogo({ className = "", strokeWidth = 2, build = false,
         fill="currentColor"
         initial={{ scale: 0, opacity: 0 }}
         animate={hidden ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
-        transition={build ? { duration: 0.2, ease: "backOut", delay: 0.37 } : { duration: 0 }}
+        transition={build ? { duration: 0.18, ease: "backOut", delay: 0.26 } : { duration: 0 }}
         onAnimationComplete={build ? onBuildComplete : undefined}
       />
     </svg>

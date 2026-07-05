@@ -63,7 +63,7 @@ const CornerMarkers = () => {
   };
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-0 opacity-60">
+    <div className="absolute inset-0 pointer-events-none z-0 opacity-80">
       {/* Top Left */}
       <svg className="absolute top-0 left-0 w-4 h-4" viewBox="0 0 16 16">
         <motion.path
@@ -72,6 +72,7 @@ const CornerMarkers = () => {
           stroke="var(--color-accent)"
           strokeWidth="1.5"
           variants={lineVariant}
+          style={{ filter: "drop-shadow(0 0 2px var(--color-accent))" }}
         />
       </svg>
       {/* Top Right */}
@@ -82,6 +83,7 @@ const CornerMarkers = () => {
           stroke="var(--color-accent)"
           strokeWidth="1.5"
           variants={lineVariant}
+          style={{ filter: "drop-shadow(0 0 2px var(--color-accent))" }}
         />
       </svg>
       {/* Bottom Left */}
@@ -92,6 +94,7 @@ const CornerMarkers = () => {
           stroke="var(--color-accent)"
           strokeWidth="1.5"
           variants={lineVariant}
+          style={{ filter: "drop-shadow(0 0 2px var(--color-accent))" }}
         />
       </svg>
       {/* Bottom Right */}
@@ -102,6 +105,7 @@ const CornerMarkers = () => {
           stroke="var(--color-accent)"
           strokeWidth="1.5"
           variants={lineVariant}
+          style={{ filter: "drop-shadow(0 0 2px var(--color-accent))" }}
         />
       </svg>
     </div>

@@ -6,6 +6,12 @@
     --font-display: "Cinzel", serif; /* Headers */
     --font-body: "Cormorant Garamond", serif; /* Reading text */
     --font-tech: "JetBrains Mono", monospace; /* Data/Code */
+
+    /* --- MOTION TOKENS (mirrored in src/lib/motionTokens.js) --- */
+    --ease-silk: cubic-bezier(0.16, 1, 0.3, 1); /* House curve — fast start, long glide */
+    --ease-mass: cubic-bezier(0.22, 0.61, 0.36, 1); /* Large containers — heavy settle */
+    --ease-snap: cubic-bezier(0.34, 1.56, 0.64, 1); /* Micro-interactions — tactile pop */
+    --ease-whip: cubic-bezier(0.83, 0, 0.17, 1); /* Exits — aggressive in and out */
   }
 
   /* --- LIGHT THEME: "THE ARCHITECT'S DESK" --- */
@@ -116,7 +122,7 @@
     transform: translateZ(0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    will-change: transform, filter;
+    will-change: transform;
   }
 
   /* Prevent video flicker on load */
@@ -195,7 +201,16 @@
 
   /* --- INTERACTION UTILITIES --- */
   .transition-lux {
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-property: background-color, color, border-color, box-shadow, transform;
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Skips layout/paint for content far from the viewport — applied to below-the-fold
+     section wrappers that are already code-split via React.lazy. */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 1200px;
   }
 
   .hover\:text-accent:hover {
@@ -234,5 +249,21 @@
 
   .will-change-transform {
     will-change: transform;
+  }
+
+  /* --- MOTION REDUCTION (global fallback) --- */
+  /* Collapses every CSS keyframe loop and transition site-wide. Framer Motion
+     components carry their own useReducedMotion gates; this covers everything
+     driven purely by stylesheets (Hero.css loops, hover transitions, GSAP-set
+     inline transforms still resolve to final state instantly). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

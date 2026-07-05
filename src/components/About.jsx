@@ -21,8 +21,6 @@ import SmartVideo from "./SmartVideo";
 // --- 1. STYLE INJECTION ---
 const GlobalStyles = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@300&display=swap');
-
     .font-cinzel { font-family: 'Cinzel', serif; }
     .font-cormorant { font-family: 'Cormorant Garamond', serif; }
     .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
@@ -312,8 +310,14 @@ const InteractiveVideoCard = ({ item, index }) => {
           }}
         />
 
-        {/* Film Grain */}
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.08] pointer-events-none mix-blend-overlay z-20" />
+        {/* Film Grain — inline SVG noise, same texture as the global .bg-grain utility */}
+        <div
+          className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-overlay z-20"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+          }}
+        />
 
         {/* Gradient Scrim */}
         <div
@@ -431,11 +435,10 @@ export default function About() {
 
   // Cinematic Variants
   const cinematicReveal = {
-    hidden: { opacity: 0, y: 60, filter: "blur(10px)" },
+    hidden: { opacity: 0, y: 60 },
     visible: {
       opacity: 1,
       y: 0,
-      filter: "blur(0px)",
       transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
     },
   };
@@ -486,7 +489,7 @@ export default function About() {
         sectionRef.current = node;
         ref(node);
       }}
-      className="relative bg-transparent text-[var(--color-text-primary)] z-10 overflow-hidden min-h-screen py-16 px-6"
+      className="relative bg-transparent text-[var(--color-text-primary)] z-10 overflow-hidden min-h-screen py-10 px-6"
     >
       <GlobalStyles />
       <TechSeparator />
@@ -509,7 +512,7 @@ export default function About() {
         finalY="-30%"
         inView={inView}
       />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 z-20 pt-12 lg:pt-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 z-20 pt-8 lg:pt-10">
         {/* --- HEADER (Animates Every Time) --- */}
         <motion.div
           initial="hidden"
@@ -518,7 +521,7 @@ export default function About() {
           variants={containerStagger}
         >
           {/* --- HEADER --- */}
-          <div className="flex flex-col lg:flex-row gap-12 mb-16 border-b border-white/40 pb-12">
+          <div className="flex flex-col lg:flex-row gap-12 mb-10 border-b border-white/40 pb-8">
             <motion.div className="lg:w-2/3" variants={cinematicReveal}>
               <div className="inline-flex items-center gap-3 mb-8">
                 <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
@@ -552,20 +555,13 @@ export default function About() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ margin: "-10%", once: true }} // Animate only once
+          viewport={{ margin: "-10%", once: true }}
           variants={containerStagger}
         >
-          {/* --- BIO: full-width now that there's no second portrait to balance (the video in Hero already carries that job) --- */}
-          <div className="max-w-4xl relative">
-            {/* Border line now marks the reading column itself */}
-            <div
-              ref={borderLineRef}
-              className="hidden lg:block absolute -left-8 top-0 w-[1px] h-full bg-gradient-to-b from-[var(--color-border)]/60 via-[var(--color-border)]/40 to-transparent"
-              style={{ transformOrigin: "top" }}
-            />
-
+          {/* --- BIO --- */}
+          <div className="max-w-3xl mx-auto">
             <motion.div className="space-y-10" variants={containerStagger}>
-              {/* PARAGRAPH 1 - The Hook */}
+              {/* PARAGRAPH 1 */}
               <motion.div variants={cinematicReveal}>
                 <AlchemyTextReveal
                   revealType="words"
@@ -575,7 +571,7 @@ export default function About() {
                   end="bottom 70%"
                   className="text-3xl md:text-4xl font-light leading-[1.5] tracking-tight"
                 >
-                  I build software like{" "}
+                  I build web, app & AI products like{" "}
                   <GoldHighlight>architecture</GoldHighlight>—where{" "}
                   <GoldHighlight>precision</GoldHighlight> and{" "}
                   <GoldHighlight>elegance</GoldHighlight> are inseparable.{" "}
@@ -587,7 +583,7 @@ export default function About() {
                 </AlchemyTextReveal>
               </motion.div>
 
-              {/* PARAGRAPH 2 - The Expertise */}
+              {/* PARAGRAPH 2 */}
               <motion.div variants={cinematicReveal}>
                 <AlchemyTextReveal
                   revealType="words"
@@ -609,7 +605,7 @@ export default function About() {
                 </AlchemyTextReveal>
               </motion.div>
 
-              {/* PARAGRAPH 3 - The Approach */}
+              {/* PARAGRAPH 3 */}
               <motion.div variants={cinematicReveal}>
                 <AlchemyTextReveal
                   revealType="words"
@@ -656,41 +652,21 @@ export default function About() {
             </motion.div>
           </div>
 
-          {/* --- ANIMATED DATA HUD (STATS) --- */}
+          {/* --- STATS (Thin inline) --- */}
           <motion.div
-            className="mt-20 mb-16 relative border-y border-[var(--color-border)] bg-[var(--color-surface)]/50 backdrop-blur-sm"
+            className="mt-20 mb-16 flex items-center justify-center gap-12 md:gap-20"
             variants={cinematicReveal}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--color-border)]">
-              {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  ref={(el) => (statRefs.current[index] = el)}
-                  className="relative p-12 flex flex-col items-center text-center hover:bg-[var(--color-accent-light)] transition-colors duration-500 group"
-                >
-                  {/* Icon */}
-                  <div className="absolute top-2 left-2 text-[var(--color-accent)] opacity-40 group-hover:animate-pulse">
-                    <svg width="10" height="10" viewBox="0 0 10 10">
-                      <path
-                        d="M0 0 L0 10 L10 10"
-                        fill="none"
-                        stroke="currentColor"
-                      />
-                    </svg>
-                  </div>
-
-                  {/* Animated Number */}
-                  <div className="font-cinzel text-5xl text-[var(--color-accent)] mb-2">
-                    <AnimatedCounter value={stat.number} />
-                  </div>
-
-                  {/* Label */}
-                  <div className="font-mono-tech text-[10px] tracking-[0.2em] text-[var(--color-text-secondary)] uppercase">
-                    {stat.label}
-                  </div>
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="font-cinzel text-3xl md:text-4xl text-[var(--color-accent)]">
+                  <AnimatedCounter value={stat.number} />
                 </div>
-              ))}
-            </div>
+                <div className="mt-2 font-mono-tech text-[9px] md:text-[10px] tracking-[0.2em] text-[var(--color-text-secondary)] uppercase">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </motion.div>
 
           {/* --- INTERACTIVE VISUAL LOGS (Videos) --- */}
@@ -738,7 +714,7 @@ export default function About() {
               &rdquo;
             </div>
             <p className="relative -mt-16 font-cinzel text-3xl md:text-4xl text-[var(--color-text-primary)] max-w-3xl mx-auto leading-tight">
-              Building software that bridges the gap between{" "}
+              Building web, app & AI products that bridges the gap between{" "}
               <span className="text-[var(--color-accent)]">what is</span> and{" "}
               <span className="text-[var(--color-accent)]">what could be</span>.
             </p>

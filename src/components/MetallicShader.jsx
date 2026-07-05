@@ -216,16 +216,37 @@ function MetallicPaint({ imageData, params = defaultParams, renderSize }) {
     ]
   );
 
+  const isInViewport = useRef(true);
+
+  const updateVisibility = () => {
+    isVisible.current = !document.hidden && isInViewport.current;
+    if (isVisible.current) {
+      animationStateRef.current.lastFrameTime = performance.now();
+    }
+  };
+
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      isVisible.current = !document.hidden;
-      if (isVisible.current) {
-        animationStateRef.current.lastFrameTime = performance.now();
-      }
-    };
+    const handleVisibilityChange = updateVisibility;
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () =>
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
+  // Several of these WebGL contexts can be mounted at once (one per skill icon) — pause
+  // each one's render loop while it's scrolled out of view, not just when the tab is hidden.
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isInViewport.current = entry.isIntersecting;
+        updateVisibility();
+      },
+      { rootMargin: "100px" }
+    );
+    observer.observe(canvas);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {

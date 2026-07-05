@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import TextScramble from "./TextScramble";
 import BentoItem from "./skills/BentoItem";
 import MetallicIcon from "./skills/MetallicIcon";
 import { preloadIcons } from "../utils/imageProcessor";
@@ -53,8 +54,39 @@ const skillsData = {
   ],
 };
 
+// --- ANIMATION VARIANTS (Hero-pattern) ---
+const group = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.155, delayChildren: 0.055 } },
+};
+
+const titleLine = {
+  hidden: { opacity: 0, y: 32, clipPath: "inset(0 0 100% 0)", filter: "blur(10px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    clipPath: "inset(0 0 0% 0)",
+    filter: "blur(0px)",
+    transition: { duration: 0.62, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const riseIn = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.43, ease: [0.16, 1, 0.3, 1] } },
+};
+
+const labelSlide = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+};
+
 export default function Skills() {
   const sectionRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
+  const rm = shouldReduceMotion;
+  const initialState = rm ? "visible" : "hidden";
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -75,7 +107,7 @@ export default function Skills() {
     <section
       id="skills"
       ref={sectionRef}
-      className="relative py-16 px-6 bg-transparent overflow-hidden min-h-screen"
+      className="relative py-10 px-6 bg-transparent overflow-hidden min-h-screen cv-auto"
     >
       <TechSeparator />
 
@@ -88,30 +120,46 @@ export default function Skills() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="mb-12 md:mb-20 border-b border-white/40 pb-8 md:pb-12">
+        <div className="mb-8 md:mb-12 border-b border-white/40 pb-6 md:pb-8">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={initialState}
+            whileInView="visible"
             viewport={{ once: true }}
+            variants={labelSlide}
             className="inline-flex items-center gap-3 mb-4 md:mb-6"
           >
             <div className="h-[1px] w-8 md:w-12 bg-[var(--color-accent)]"></div>
-            <span className="font-mono-tech text-[10px] md:text-xs text-[var(--color-accent)] tracking-[0.3em]">
-              CAPABILITIES // 003
-            </span>
+            {rm ? (
+              <span className="font-mono-tech text-[10px] md:text-xs text-[var(--color-accent)] tracking-[0.3em]">
+                CAPABILITIES
+              </span>
+            ) : (
+              <TextScramble
+                text="CAPABILITIES"
+                trigger="inViewAndHover"
+                speed={20}
+                className="font-mono-tech text-[10px] md:text-xs tracking-[0.3em]"
+                accentColor="var(--color-accent)"
+                baseColor="var(--color-accent)"
+              />
+            )}
           </motion.div>
 
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={initialState}
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            variants={group}
             className="font-cinzel text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-[0.9] text-[var(--color-text-primary)] tracking-tight"
           >
-            Technical <br />
-            <span className="font-cormorant italic text-[var(--color-accent)] font-light">
-              Arsenal
-            </span>
+            <motion.span variants={titleLine} className="block">
+              Technical
+            </motion.span>
+            <motion.span variants={titleLine} className="block">
+              <span className="font-cormorant italic text-[var(--color-accent)] font-light">
+                Skills
+              </span>
+            </motion.span>
           </motion.h2>
         </div>
 
@@ -228,7 +276,7 @@ export default function Skills() {
           >
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 md:gap-12 text-center w-full justify-center px-2">
               <div className="flex flex-col items-center">
-                <span className="block text-2xl md:text-3xl font-cinzel text-[var(--color-accent]">
+                <span className="block text-2xl md:text-3xl font-cinzel text-[var(--color-accent)]">
                   100%
                 </span>
                 <span className="text-[8px] md:text-[10px] font-mono-tech text-[var(--color-text-secondary)] tracking-widest">

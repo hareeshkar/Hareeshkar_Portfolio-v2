@@ -51,7 +51,7 @@ function App() {
     <>
       {/* Preload videos in background */}
       <VideoPreloader />
-      <ParticleController />
+      {/* <ParticleController /> */}
 
       {/* Global Scrim for Light Mode Contrast - Positioned correctly */}
       <div
@@ -65,11 +65,13 @@ function App() {
           <Hero />
         </SectionObserver>
 
-        <Suspense fallback={<SectionLoader />}>
+        {/* <Suspense fallback={<SectionLoader />}>
           <SectionObserver configKey="about" threshold={0.1}>
             <About />
           </SectionObserver>
+        </Suspense> */}
 
+        <Suspense fallback={<SectionLoader />}>
           <SectionObserver configKey="projects">
             <Projects />
           </SectionObserver>

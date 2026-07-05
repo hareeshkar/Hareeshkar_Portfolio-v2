@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import ContactForm from "./contact/ContactForm";
 import ContactInfo from "./contact/ContactInfo";
+import Spotlight from "./Spotlight";
+import TextScramble from "./TextScramble";
 
 // Reusing components from About for consistency
 // Note: Ideally these should be in a shared 'ui' folder, but importing from About context for now
@@ -24,8 +26,29 @@ const TechSeparator = () => (
   </div>
 );
 
-const AlchemyTextReveal = ({ children, className }) => {
-  // Removed state-based animation to prevent hydration mismatch and jumps on mobile
+// --- ANIMATION VARIANTS (Hero-pattern) ---
+const group = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.155, delayChildren: 0.055 } },
+};
+
+const titleLine = {
+  hidden: { opacity: 0, y: 32, clipPath: "inset(0 0 100% 0)", filter: "blur(10px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    clipPath: "inset(0 0 0% 0)",
+    filter: "blur(0px)",
+    transition: { duration: 0.62, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const riseIn = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.43, ease: [0.16, 1, 0.3, 1] } },
+};
+
+const AlchemyTextReveal = ({ children, className, as: Tag = "div" }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -33,7 +56,7 @@ const AlchemyTextReveal = ({ children, className }) => {
       viewport={{ once: true, margin: "-10%" }}
       transition={{
         duration: 0.8,
-        ease: "easeOut",
+        ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
       style={{ willChange: "opacity, transform" }}
@@ -46,6 +69,9 @@ const AlchemyTextReveal = ({ children, className }) => {
 const Contact = () => {
   const containerRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+  const rm = shouldReduceMotion;
+  const initialState = rm ? "visible" : "hidden";
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -60,21 +86,46 @@ const Contact = () => {
       setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
     };
     checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    // rAF-throttled: resize can fire dozens of times per frame during a drag;
+    // one measurement per frame is all the parallax gate needs.
+    let rafId = null;
+    const handleResize = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        checkMobile();
+      });
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
     <section
       id="contact"
       ref={containerRef}
-      className="relative min-h-screen bg-transparent py-16 px-6 overflow-hidden"
+      className="relative min-h-screen bg-transparent py-10 px-6 overflow-hidden cv-auto"
     >
-      {/* Background Atmosphere - REMOVED ALL YELLOW TINTS */}
+      {/* Background Atmosphere */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-accent)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-accent)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-[0.05]" />
-        {/* REMOVED: Yellow accent blur backgrounds completely */}
+        {/* Film Grain Texture */}
+        <div className="absolute inset-0 bg-grain opacity-[0.03] pointer-events-none" />
       </div>
+
+      {/* Spotlight Effect */}
+      <Spotlight
+        className="pointer-events-none"
+        fill="rgba(163, 136, 72, 0.12)"
+        from="top-right"
+        size="xlarge"
+        blur={200}
+        duration={2.5}
+        delay={0.5}
+      />
 
       <TechSeparator />
 
@@ -83,18 +134,58 @@ const Contact = () => {
           {/* LEFT COLUMN: Typography & Info (5 cols) */}
           <div className="lg:col-span-5 flex flex-col justify-between h-full">
             <div className="mb-12 lg:mb-0">
-              <AlchemyTextReveal className="font-cinzel text-5xl md:text-6xl lg:text-8xl text-[var(--color-text-primary)] leading-[0.9] mb-6 md:mb-8">
-                Let's <br />
-                <span className="text-[var(--color-accent)] italic font-cormorant font-light">
-                  Build It
-                </span>
-              </AlchemyTextReveal>
+              {/* Eyebrow — decode motif, matching Projects/Skills headers */}
+              <motion.div
+                initial={initialState}
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={riseIn}
+                className="inline-flex items-center gap-3 mb-6"
+              >
+                <div className="h-[1px] w-10 bg-[var(--color-accent)]" />
+                {rm ? (
+                  <span className="font-mono-tech text-[10px] text-[var(--color-accent)] tracking-[0.3em] uppercase">
+                    Contact
+                  </span>
+                ) : (
+                  <TextScramble
+                    text="Contact"
+                    trigger="inViewAndHover"
+                    speed={20}
+                    className="font-mono-tech text-[10px] tracking-[0.3em] uppercase"
+                    accentColor="var(--color-accent)"
+                    baseColor="var(--color-accent)"
+                  />
+                )}
+              </motion.div>
+
+              {/* Cinematic Headline with clipPath reveal */}
+              <motion.div
+                initial={initialState}
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={group}
+                className="font-cinzel text-5xl md:text-6xl lg:text-8xl text-[var(--color-text-primary)] leading-[0.9] mb-6 md:mb-8"
+              >
+                <motion.span variants={titleLine} className="block">
+                  Let's
+                </motion.span>
+                <motion.span variants={titleLine} className="block">
+                  <span className="text-[var(--color-accent)] italic font-cormorant font-light">
+                    Build It
+                  </span>
+                </motion.span>
+              </motion.div>
 
               <AlchemyTextReveal className="text-base md:text-lg text-[var(--color-text-secondary)] max-w-xl leading-relaxed mb-8 md:mb-12">
                 <span className="font-semibold text-[var(--color-accent)]">
                   Full-stack systems
                 </span>{" "}
                 that scale.{" "}
+                <span className="font-semibold text-[var(--color-accent)]">
+                  Web & app products
+                </span>{" "}
+                built end to end.{" "}
                 <span className="font-semibold text-[var(--color-accent)]">
                   AI-powered intelligence
                 </span>{" "}

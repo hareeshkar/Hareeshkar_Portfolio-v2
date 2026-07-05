@@ -18,7 +18,7 @@ const projectsData = [
     ],
     liveLink: "#",
     githubLink: "https://github.com/hareeshkar/pca-cinemax",
-    image: `${import.meta.env.BASE_URL}project_images/pca.jpg`,
+    image: `${import.meta.env.BASE_URL}project_images/pca.webp`,
   },
   {
     title: "Synapse Med — AI Clinical Intelligence Engine",
@@ -34,7 +34,7 @@ const projectsData = [
     ],
     liveLink: "#",
     githubLink: "https://github.com/hareeshkar/synapse-med",
-    image: `${import.meta.env.BASE_URL}project_images/syn.jpg`,
+    image: `${import.meta.env.BASE_URL}project_images/syn.webp`,
   },
   {
     title: "Clinical Simulator — iOS Training Platform",
@@ -43,7 +43,7 @@ const projectsData = [
     techStack: ["SwiftUI", "SwiftData", "Firebase", "Gemini/OpenAI APIs"],
     liveLink: "#",
     githubLink: "https://github.com/hareeshkar/ClinicalSimulator",
-    image: `${import.meta.env.BASE_URL}project_images/ios.png`,
+    image: `${import.meta.env.BASE_URL}project_images/ios.webp`,
   },
   {
     title: "The Gadget Hub — Enterprise E‑Commerce",
@@ -52,16 +52,7 @@ const projectsData = [
     techStack: ["ASP.NET Core", "C#", "MSSQL", "Entity Framework"],
     liveLink: "#",
     githubLink: "https://github.com/hareeshkar", // fallback
-    image: `${import.meta.env.BASE_URL}project_images/gad.jpg`,
-  },
-  {
-    title: "E‑Waste Management Platform",
-    description:
-      "A multi-role platform for managing e-waste logistics, featuring role-based access control and analytics dashboards.",
-    techStack: ["PHP", "MySQL", "REST API", "Chart.js"],
-    liveLink: "#",
-    githubLink: "https://github.com/hareeshkar", // restored project (fallback)
-    image: `${import.meta.env.BASE_URL}project_images/green.jpg`,
+    image: `${import.meta.env.BASE_URL}project_images/gad.webp`,
   },
   {
     title: "EcoStay Retreat — Resort Management",
@@ -70,34 +61,60 @@ const projectsData = [
     techStack: ["Java", "Android SDK", "SQLite"],
     liveLink: "#",
     githubLink: "https://github.com/hareeshkar", // restored project (fallback)
-    image: `${import.meta.env.BASE_URL}project_images/ecoo.jpg`,
+    image: `${import.meta.env.BASE_URL}project_images/ecoo.webp`,
   },
   {
-    title: "AI Powered Virtual Try-On Studio",
+    title: "E‑Waste Management Platform — Sustainable Logistics System",
+    description:
+      "A multi-role platform for managing e-waste logistics, featuring role-based access control and analytics dashboards.",
+    techStack: ["PHP", "MySQL", "REST API", "Chart.js"],
+    liveLink: "#",
+    githubLink: "https://github.com/hareeshkar", // restored project (fallback)
+    image: `${import.meta.env.BASE_URL}project_images/green.webp`,
+  },
+  {
+    title: "AI Powered Virtual Try-On Studio — Generative Fashion",
     description:
       "Photorealistic virtual try-on app leveraging generative models and iterative prompts for multi-angle outfit previews.",
     techStack: ["React", "TypeScript", "Tailwind CSS", "Vite", "Gemini AI"],
     liveLink: "#",
     githubLink: "https://github.com/hareeshkar", // fallback
-    image: `${import.meta.env.BASE_URL}project_images/ge.jpg`,
+    image: `${import.meta.env.BASE_URL}project_images/ge.webp`,
   },
   {
-    title: "AI Powered Attendance System",
+    title: "AI Powered Attendance System — Facial Recognition",
     description:
       "A secure, automated attendance system using facial recognition, featuring dynamic dashboards and leave policy enforcement.",
     techStack: ["Python", "OpenCV", "PHP", "MySQL", "GSAP"],
     liveLink: null,
     githubLink: "https://github.com/hareeshkar", // fallback
-    image: `${import.meta.env.BASE_URL}project_images/icbt.jpg`,
+    image: `${import.meta.env.BASE_URL}project_images/icbt.webp`,
   },
   {
-    title: "Codebase Prompt Packer",
+    title: "Codebase Prompt Packer — VS Code Extension",
     description:
       "VS Code extension to package workspace context into LLM-friendly prompts to accelerate AI-assisted development workflows.",
     techStack: ["JavaScript", "VS Code API", "Node.js"],
     liveLink: null,
     githubLink: "https://github.com/hareeshkar/codebase-prompt-packer",
-    image: `${import.meta.env.BASE_URL}project_images/co.jpg`,
+    image: `${import.meta.env.BASE_URL}project_images/co.webp`,
+  },
+  {
+    title: "Wasi — AI Shopping Concierge for Kapruka",
+    description:
+      "Trilingual, multimodal shopping assistant built on Kapruka's live MCP API. Users discover gifts, compare products, build bundles, validate delivery to any Sri Lankan city, lock prices, and pay through natural conversation in English, Sinhala, Tamil, or mixed Singlish. Features a dual-layer orchestration model with a six-state decision engine and 20 declared tools.",
+    techStack: [
+      "React 19",
+      "TypeScript",
+      "Vite 6",
+      "Tailwind CSS 4",
+      "Gemini 3.1 Flash-Lite",
+      "Supabase",
+      "Kapruka MCP",
+    ],
+    liveLink: "https://wasi-etpz.onrender.com",
+    githubLink: null,
+    image: `${import.meta.env.BASE_URL}project_images/wasi.jpeg`,
   },
 ];
 
